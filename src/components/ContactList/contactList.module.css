@@ -1,0 +1,22 @@
+.list {
+  width: 500px;
+  text-align: center;
+  list-style: none;
+}
+
+.listItem {
+  margin-bottom: 20px;
+}
+
+.listItemText {
+  margin-right: 10px;
+}
+
+.button {
+  margin-left: 20px;
+  cursor: pointer;
+}
+.button:hover,
+.button:focus {
+  background-color: tomato;
+}
