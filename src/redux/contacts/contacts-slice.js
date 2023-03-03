@@ -1,25 +1,51 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { nanoid } from 'nanoid';
+
+import * as actions from './contacts-actions';
+
+const initialState = {
+  items: [],
+  loading: false,
+  error: null,
+};
 
 const contactsSlice = createSlice({
   name: 'contacts',
-  initialState: [],
-  reducers: {
-    addContacts: {
-      reducer: (state, { payload }) => {
-        state.push(payload);
-      },
-      prepare: data => {
-        return {
-          payload: {
-            id: nanoid(),
-            ...data,
-          },
-        };
-      },
+  initialState,
+  extraReducers: {
+    [actions.fetchAllContactsLoading]: store => {
+      store.loading = true;
     },
-    deleteContacts: (state, { payload }) =>
-      state.filter(({ id }) => id !== payload),
+    [actions.fetchAllContactsSuccess]: (store, { payload }) => {
+      store.loading = false;
+      store.items = payload;
+    },
+    [actions.fetchAllContactsError]: (store, { payload }) => {
+      store.loading = false;
+      store.error = payload;
+    },
+    [actions.fetchAddContactsLoading]: store => {
+      store.loading = true;
+    },
+    [actions.fetchAddContactsSuccess]: (store, { payload }) => {
+      store.loading = false;
+      store.items.push(payload);
+    },
+    [actions.fetchAddContactsError]: (store, { payload }) => {
+      store.loading = false;
+      store.error = payload;
+    },
+    [actions.fetchDeleteContactsLoading]: store => {
+      store.loading = true;
+    },
+    [actions.fetchDeleteContactsSuccess]: (store, { payload }) => {
+      store.loading = false;
+      const index = store.items.findIndex(item => item.id === payload);
+      store.items.splice(index, 1);
+    },
+    [actions.fetchDeleteContactsError]: (store, { payload }) => {
+      store.loading = false;
+      store.error = payload;
+    },
   },
 });
 
