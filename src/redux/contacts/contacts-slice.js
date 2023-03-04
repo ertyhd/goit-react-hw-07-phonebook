@@ -1,6 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import * as actions from './contacts-actions';
+import {
+  fetchAllContacts,
+  fetchAddContacts,
+  fetchDeleteContacts,
+} from './contacts-operations';
 
 const initialState = {
   items: [],
@@ -11,43 +15,43 @@ const initialState = {
 const contactsSlice = createSlice({
   name: 'contacts',
   initialState,
-  extraReducers: {
-    [actions.fetchAllContactsLoading]: store => {
-      store.loading = true;
-    },
-    [actions.fetchAllContactsSuccess]: (store, { payload }) => {
-      store.loading = false;
-      store.items = payload;
-    },
-    [actions.fetchAllContactsError]: (store, { payload }) => {
-      store.loading = false;
-      store.error = payload;
-    },
-    [actions.fetchAddContactsLoading]: store => {
-      store.loading = true;
-    },
-    [actions.fetchAddContactsSuccess]: (store, { payload }) => {
-      store.loading = false;
-      store.items.push(payload);
-    },
-    [actions.fetchAddContactsError]: (store, { payload }) => {
-      store.loading = false;
-      store.error = payload;
-    },
-    [actions.fetchDeleteContactsLoading]: store => {
-      store.loading = true;
-    },
-    [actions.fetchDeleteContactsSuccess]: (store, { payload }) => {
-      store.loading = false;
-      const index = store.items.findIndex(item => item.id === payload);
-      store.items.splice(index, 1);
-    },
-    [actions.fetchDeleteContactsError]: (store, { payload }) => {
-      store.loading = false;
-      store.error = payload;
-    },
+  extraReducers: builder => {
+    builder
+      .addCase(fetchAllContacts.pending, store => {
+        store.loading = true;
+      })
+      .addCase(fetchAllContacts.fulfilled, (store, { payload }) => {
+        store.loading = false;
+        store.items = payload;
+      })
+      .addCase(fetchAllContacts.rejected, (store, { payload }) => {
+        store.loading = false;
+        store.error = payload;
+      })
+      .addCase(fetchAddContacts.pending, store => {
+        store.loading = true;
+      })
+      .addCase(fetchAddContacts.fulfilled, (store, { payload }) => {
+        store.loading = false;
+        store.items.push(payload);
+      })
+      .addCase(fetchAddContacts.rejected, (store, { payload }) => {
+        store.loading = false;
+        store.error = payload;
+      })
+      .addCase(fetchDeleteContacts.pending, store => {
+        store.loading = true;
+      })
+      .addCase(fetchDeleteContacts.fulfilled, (store, { payload }) => {
+        store.loading = false;
+        const index = store.items.findIndex(item => item.id === payload);
+        store.items.splice(index, 1);
+      })
+      .addCase(fetchDeleteContacts.rejected, (store, { payload }) => {
+        store.loading = false;
+        store.error = payload;
+      });
   },
 });
 
-export const { addContacts, deleteContacts } = contactsSlice.actions;
 export default contactsSlice.reducer;

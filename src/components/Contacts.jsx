@@ -10,19 +10,14 @@ import {
   fetchAddContacts,
   fetchDeleteContacts,
 } from 'redux/contacts/contacts-operations';
-// import { addContacts, deleteContacts } from 'redux/contacts/contacts-slice';
 import { setFilter } from 'redux/filter/filter-slice';
 
-import {
-  // getAllContacts,
-  getFilteredContacts,
-} from 'redux/contacts/contacts-selectors';
+import { getFilteredContacts } from 'redux/contacts/contacts-selectors';
 import { getFilter } from 'redux/filter/filter-celectors';
 
 import style from './contacts.module.css';
 
 const Contacts = () => {
-  // const allContacts = useSelector(getAllContacts);
   const filter = useSelector(getFilter);
   const filteredContacts = useSelector(getFilteredContacts);
 
@@ -31,17 +26,6 @@ const Contacts = () => {
   useEffect(() => {
     dispatch(fetchAllContacts());
   }, [dispatch]);
-
-  // const isDublicate = (name, number) => {
-  //   const normName = name.toLowerCase();
-  //   const normNumber = number.toLowerCase();
-  //   const findContact = allContacts.find(({ name, number }) => {
-  //     return (
-  //       name.toLowerCase() === normName && number.toLowerCase() === normNumber
-  //     );
-  //   });
-  //   return Boolean(findContact);
-  // };
 
   const onAddContact = ({ name, number }) => {
     dispatch(fetchAddContacts({ name, number }));
